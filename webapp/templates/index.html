@@ -1,0 +1,128 @@
+{% extends "core.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    <script>
+    $(function() {
+        $(".trackForm select").on("change",function (e) {
+            var system_id = $(e.target).closest("form").data("system_id");
+            var track_id = $(e.target).val();
+            $.post( "/api/updateTrack", { system_id: system_id, track_id: track_id },function (resp) {
+                console.log(resp)            
+            });
+        });
+    });
+    </script>
+     <div class="container">
+        {% if current_user.is_authenticated %}
+            Account: {{ current_user.username }} <br /> <br />
+            <hr style="width: 100%; background-color: black; height: 1px; border-color : transparent;" />
+
+            {% if stats %}
+            <div class="row">
+                <div class="col-md-12">
+                    <h4>Installs:</h4>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th scope="col">Hostname<br />System ID</th>
+                          <th scope="col">Version</th>
+                          <th scope="col">Track</th>
+                          <th scope="col">Mem<br />Root Usage<br />Uptime</th>
+                          <th scope="col">Last Check-in</th>
+                          <th scope="col">IP</th>
+                        </tr>
+                        {% for stat in stats %}
+                        <tr>
+                            <td>{{ stat.hostname }}<br />{{ stat.system_id }}</td>
+                            <td>{{ stat.version }}
+                                {% if stat.version != stat.trackObj.current_version %}
+                                <p><button onclick='alert("This currently does nothing")' >Upgrade to {{ stat.trackObj.track }} {{ stat.trackObj.current_version }}</button></p>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <form method="POST" class="trackForm" data-system_id="{{ stat.system_id }}">
+                                    {{ stat.trackForm.system_id }}
+                                    {{ stat.trackForm.track_id }}
+                                </form>
+                            </td>
+                            <td>{{ stat.mem }}%<br />{{ stat.root_usage }}%<br />{{ stat.formatted_uptime }}</td>
+                            <td>{{ stat.last_update }}</td>
+                            <td>{{ stat.remote_addr }}</td>
+                        </tr>
+                        {% endfor %}
+
+                      </thead>
+
+                    <tbody>
+                    </tbody>
+                    </table>
+                </div>
+            </div>
+            <hr style="width: 100%; background-color: black; height: 1px; border-color : transparent;" />
+
+
+            {% endif %}
+
+            {% if tracks %}
+            <div class="row">
+                <div class="col-md-12">
+                    <h4>Current Versions:</h4>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th scope="col">Name</th>
+                          <th scope="col">Version</th>
+                          <th scope="col">URL</th>
+                        </tr>
+                      </thead>
+
+                    <tbody>
+                    {% for track in tracks %}
+                        <tr>
+                          <th scope="row">{{ track.track }}</th>
+                          <td>{{ track.current_version }}</td>
+                          <td>{{ track.version_url }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                    </table>
+                </div>
+            </div>
+            <hr style="width: 100%; background-color: black; height: 1px; border-color : transparent;" />
+            {% endif %}
+
+            <div class="row">
+                <div class="col-md-12">
+                    <h4>API Key:</h4>
+                </div>
+            </div>
+            {% if not apikey %}
+            <div class="row">
+                <div class="col-md-3">
+                    You don't appear to have an API Key.  Generate one now. <br /><br /><br />
+                    {{ wtf.quick_form(apikeyform) }}
+                </div>
+            </div>
+            {% else %}
+            <div class="row">
+                <div class="col-md-3">
+                    Your API Key is: <input type="text" readonly size=40 value="{{ apikey.apikey }}" /> {{ wtf.quick_form(deletekeyform) }}
+                </div>
+            </div>
+
+            {% endif %}
+        {% else %}
+            Hello.  Login or create an account with the above links
+        {% endif %}
+     </div>
+{% endblock %}

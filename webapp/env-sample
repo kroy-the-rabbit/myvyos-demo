@@ -1,0 +1,6 @@
+DEBUG=true
+SQLALCHEMY_DATABASE_URI=mysql://myvyos_webapp:myvyos_password_1235@db/myvyos
+SQLALCHEMY_TRACK_MODIFICATIONS=false
+SECRET_KEY=rgSG7IojY0Nhk9QyARWZK9SpH1mebe41
+SESSION_TYPE=redis
+REDIS_URI=redis://redis:6379

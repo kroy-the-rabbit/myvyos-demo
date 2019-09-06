@@ -1,0 +1,33 @@
+version: '3.1'
+
+services:
+
+    db:
+        image: mariadb
+        restart: always
+        command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+        volumes:
+            - ./data/mariadb/:/var/lib/mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: myvyos_root_pass
+            MYSQL_DATABASE: myvyos
+            MYSQL_USER: myvyos_webapp
+            MYSQL_PASSWORD: myvyos_password_1235
+        healthcheck:
+            test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost", "-pmyvyos_root_pass"]
+            timeout: 20s
+            retries: 10
+    web:
+        build: ./webapp/
+        restart: always
+        ports:
+            - "5000:5000"
+        volumes:
+            - ./webapp:/code
+        depends_on:
+            - redis
+            - db
+    redis:
+            image: redis
+
+

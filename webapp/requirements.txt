@@ -1,0 +1,12 @@
+flask
+redis
+gunicorn
+Flask-Bootstrap
+Flask-SQLAlchemy
+Flask-Migrate
+flask_wtf
+flask_session
+flask_login
+python-dotenv
+mysqlclient
+bcrypt

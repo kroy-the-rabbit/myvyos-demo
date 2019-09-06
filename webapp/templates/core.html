@@ -1,0 +1,20 @@
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block navbar %}
+    <nav class="navbar navbar-inverse" role="navigation">
+        <div class="container">
+           <a class="navbar-brand" href="{{ url_for('site.index') }}">Home</a>
+           {% if current_user.is_authenticated %}
+           <a class="navbar-brand" href="{{ url_for('site.logout') }}">Logout</a>
+           {% else %}
+           <a class="navbar-brand" href="{{ url_for('site.login') }}">Login</a> | <a class="navbar-brand" href="{{ url_for('site.signup') }}">Signup</a>
+           {% endif %}
+        </div>
+    </nav>
+<script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+      crossorigin="anonymous"></script>
+{% endblock %}
+
