@@ -3,4 +3,4 @@ This is a demo site for a potential integration between VyOS installs and a cent
 
 To demonstrate it, create an account at https://myvyos.kroy.io/ and generate an API key.  
 
-This API key goes in `collector.py`, which needs to be run on the VyOS system.  
+This API key goes in `collector.py`, which needs to be run on the VyOS system.  Ideally this script would eventually have tighter integration into the various VyOS apis.
